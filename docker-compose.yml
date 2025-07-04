@@ -1,0 +1,15 @@
+services:
+  hotel_management_system:
+    container_name: hotel_management_system
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: hotelmanagementsystem
+    ports:
+      - "5434:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+
+volumes:
+  data:
