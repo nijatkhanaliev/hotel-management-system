@@ -24,6 +24,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomResponse createRoom(RoomRequest roomRequest) {
+
         Room room = roomMapper.toRoom(roomRequest);
         room.setRoomStatus(RoomStatus.AVAILABLE);
 

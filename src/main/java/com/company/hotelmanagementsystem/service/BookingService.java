@@ -12,5 +12,5 @@ public interface BookingService {
 
     BookingResponse getBookingById(long id);
 
-    void deleteBooking(long id);
+    void cancelBooking(long id);
 }
