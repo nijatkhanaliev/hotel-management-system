@@ -2,6 +2,7 @@ package com.company.hotelmanagementsystem.exception;
 
 import com.company.hotelmanagementsystem.dto.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,11 +14,13 @@ import java.util.Set;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleNotFound(NotFoundException ex, HttpServletRequest req){
+        log.error("Not found. errorMessage: {}",ex.getMessage());
         String path = req.getRequestURI();
 
         return ResponseEntity.status(NOT_FOUND)
@@ -33,6 +36,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleNotValid(MethodArgumentNotValidException ex, HttpServletRequest req){
+        log.error("Method argument not valid. errorMessage: {}",ex.getMessage());
         String path = req.getRequestURI();
         Set<String> errors = new HashSet<>();
 
@@ -50,8 +54,9 @@ public class GlobalExceptionHandler {
                 );
     }
 
-    @ExceptionHandler(InvalidException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalid(InvalidException ex, HttpServletRequest req){
+    @ExceptionHandler(BookingValidationException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalid(BookingValidationException ex, HttpServletRequest req){
+        log.error("Booking is not valid. errorMessage: {}",ex.getMessage());
         String path = req.getRequestURI();
 
         return ResponseEntity.status(BAD_REQUEST)

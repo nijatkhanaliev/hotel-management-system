@@ -11,7 +11,7 @@ import com.company.hotelmanagementsystem.mapper.BookingMapper;
 import com.company.hotelmanagementsystem.repository.BookingRepository;
 import com.company.hotelmanagementsystem.repository.RoomRepository;
 import com.company.hotelmanagementsystem.service.BookingService;
-import com.company.hotelmanagementsystem.util.ValidateBooking;
+import com.company.hotelmanagementsystem.util.BookingValidationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,8 +41,8 @@ public class BookingServiceImpl implements BookingService {
         booking.setBookingStatus(BookingStatus.ACTIVE);
         bookingRepository.save(booking);
 
-        ValidateBooking.isDateValid(bookingRequest);
-        ValidateBooking.isRoomAvailable(room, bookingRequest);
+        BookingValidationUtil.isDateValid(bookingRequest);
+        BookingValidationUtil.isRoomAvailable(room, bookingRequest);
 
         log.info("Updating room booking, roomId '{}'",roomId);
         room.setBooking(booking);
