@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.company.hotelmanagementsystem.exception.constant.ErrorCode.NOT_FOUND;
+import static com.company.hotelmanagementsystem.exception.constant.ErrorMessage.NOT_FOUND_MESSAGE;
+
 
 @Slf4j
 @Service
@@ -45,7 +48,7 @@ public class HotelServiceImpl implements HotelService {
     public HotelResponse getHotelById(long id) {
         log.info("Getting hotel by id '{}'",id);
         Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException("Hotel not found with ID: " + id));
+                .orElseThrow(()-> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
         return hotelMapper.toHotelResponse(hotel);
     }
@@ -54,7 +57,7 @@ public class HotelServiceImpl implements HotelService {
     public HotelResponse updateHotel(long id, HotelRequest hotelRequest) {
         log.info("Getting Hotel by ID '{}'",id);
         Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException("Hotel not found with ID: " + id));
+                .orElseThrow(()-> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
         log.info("Updating Hotel, hotelID '{}'",id);
         hotel.setName(hotelRequest.getName());
@@ -68,7 +71,7 @@ public class HotelServiceImpl implements HotelService {
     public void deleteHotel(long id) {
         log.info("Getting hotel by ID '{}'",id);
        Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException("Hotel not found with ID: " + id));
+                .orElseThrow(()-> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
         log.warn("Deleting hotel, hotelId '{}'",id);
         hotelRepository.delete(hotel);

@@ -19,15 +19,15 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFound(NotFoundException ex, HttpServletRequest req){
-        log.error("Not found. errorMessage: {}",ex.getMessage());
+    public ResponseEntity<ExceptionResponse> handleNotFound(NotFoundException ex, HttpServletRequest req) {
+        log.error("Not found. errorMessage: {}", ex.getMessage());
         String path = req.getRequestURI();
 
         return ResponseEntity.status(NOT_FOUND)
                 .body(
                         ExceptionResponse.builder()
-                                .error("Not Found")
-                                .message(ex.getMessage())
+                                .error(ex.getErrorCode())
+                                .message(ex.getErrorMessage())
                                 .status(404)
                                 .path(path)
                                 .build()
@@ -35,13 +35,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleNotValid(MethodArgumentNotValidException ex, HttpServletRequest req){
-        log.error("Method argument not valid. errorMessage: {}",ex.getMessage());
+    public ResponseEntity<ExceptionResponse> handleNotValid(MethodArgumentNotValidException ex, HttpServletRequest req) {
+        log.error("Method argument not valid. errorMessage: {}", ex.getMessage());
         String path = req.getRequestURI();
         Set<String> errors = new HashSet<>();
 
         ex.getBindingResult().getFieldErrors()
-                .forEach((e)-> errors.add(e.getDefaultMessage()));
+                .forEach((e) -> errors.add(e.getDefaultMessage()));
 
         return ResponseEntity.status(BAD_REQUEST)
                 .body(
@@ -55,15 +55,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BookingValidationException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalid(BookingValidationException ex, HttpServletRequest req){
-        log.error("Booking is not valid. errorMessage: {}",ex.getMessage());
+    public ResponseEntity<ExceptionResponse> handleInvalid(BookingValidationException ex, HttpServletRequest req) {
+        log.error("Booking is not valid. errorMessage: {}", ex.getMessage());
         String path = req.getRequestURI();
 
         return ResponseEntity.status(BAD_REQUEST)
                 .body(
                         ExceptionResponse.builder()
-                                .error("Bad Request")
-                                .message(ex.getMessage())
+                                .error(ex.getErrorCode())
+                                .message(ex.getErrorMessage())
                                 .status(400)
                                 .path(path)
                                 .build()

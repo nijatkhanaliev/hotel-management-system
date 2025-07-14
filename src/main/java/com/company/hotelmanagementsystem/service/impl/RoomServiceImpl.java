@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.company.hotelmanagementsystem.exception.constant.ErrorCode.NOT_FOUND;
+import static com.company.hotelmanagementsystem.exception.constant.ErrorMessage.NOT_FOUND_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
@@ -45,7 +48,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public RoomResponse getRoomById(long id) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Room not found by ID: " + id));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
         return roomMapper.toRoomResponse(room);
     }
@@ -53,10 +56,10 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public RoomResponse updateRoom(long id, RoomRequest roomRequest) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Room not found by ID: " + id));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
         Hotel hotel = hotelRepository.findById(roomRequest.getHotelId())
-                        .orElseThrow(()-> new NotFoundException("Hotel not found with ID: " + id));
+                        .orElseThrow(()-> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
 
         room.setRoomNumber(roomRequest.getRoomNumber());
@@ -71,7 +74,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void deleteRoom(long id) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Room not found by ID: " + id));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
         roomRepository.delete(room);
     }

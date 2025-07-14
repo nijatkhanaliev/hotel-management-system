@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.company.hotelmanagementsystem.exception.constant.ErrorCode.NOT_FOUND;
+import static com.company.hotelmanagementsystem.exception.constant.ErrorMessage.NOT_FOUND_MESSAGE;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,11 +34,11 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingResponse createBooking(BookingRequest bookingRequest) {
         long roomId = bookingRequest.getRoomId();
-        log.info("Getting room by id '{}'",roomId);
+        log.info("Getting room by id '{}'", roomId);
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new NotFoundException("Room not found with ID: " + roomId));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
-        log.info("Creating new booking with roomID '{}'",roomId);
+        log.info("Creating new booking with roomID '{}'", roomId);
         Booking booking = bookingMapper.toBooking(bookingRequest);
         booking.setRoom(room);
         booking.setBookingStatus(BookingStatus.ACTIVE);
@@ -44,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
         BookingValidationUtil.isDateValid(bookingRequest);
         BookingValidationUtil.isRoomAvailable(room, bookingRequest);
 
-        log.info("Updating room booking, roomId '{}'",roomId);
+        log.info("Updating room booking, roomId '{}'", roomId);
         room.setBooking(booking);
         room.setRoomStatus(RoomStatus.BOOKED);
         roomRepository.save(room);
@@ -64,9 +67,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponse getBookingById(long id) {
-        log.info("Getting booking by ID '{}'",id);
+        log.info("Getting booking by ID '{}'", id);
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Booking not found with ID:" + id));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
         return bookingMapper.toBookingResponse(booking);
     }
@@ -74,20 +77,20 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public void cancelBooking(long id) {
-        log.info("Getting booking by id '{}'",id);
+        log.info("Getting booking by id '{}'", id);
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Booking not found with ID:" + id));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
 
-        log.warn("Cancelling booking by ID '{}'",id);
+        log.warn("Cancelling booking by ID '{}'", id);
         booking.setBookingStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
 
         long roomId = booking.getRoom().getId();
 
-        log.info("Getting room by ID '{}'",roomId);
+        log.info("Getting room by ID '{}'", roomId);
         Room room = roomRepository.findById(booking.getRoom().getId())
-                .orElseThrow(() -> new NotFoundException("Room not found with ID: " + roomId));
-        log.info("Updating room, roomId '{}'",roomId);
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+        log.info("Updating room, roomId '{}'", roomId);
         room.setBooking(null);
         room.setRoomStatus(RoomStatus.AVAILABLE);
         roomRepository.save(room);

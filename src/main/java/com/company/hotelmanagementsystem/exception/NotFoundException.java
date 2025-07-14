@@ -1,7 +1,15 @@
 package com.company.hotelmanagementsystem.exception;
 
+import lombok.Getter;
+
+@Getter
 public class NotFoundException extends RuntimeException {
-    public NotFoundException(String msg) {
+    private final String errorCode;
+    private final String errorMessage;
+
+    public NotFoundException(String msg,String errorCode) {
         super(msg);
+        this.errorCode = errorCode;
+        this.errorMessage = msg;
     }
 }
