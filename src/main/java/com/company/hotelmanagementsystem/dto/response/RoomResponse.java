@@ -17,6 +17,6 @@ public class RoomResponse {
     private String roomNumber;
     private double price;
     private RoomStatus roomStatus;
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
 }

@@ -36,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
         long roomId = bookingRequest.getRoomId();
         log.info("Getting room by id '{}'", roomId);
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
         log.info("Creating new booking with roomID '{}'", roomId);
         Booking booking = bookingMapper.toBooking(bookingRequest);
@@ -69,7 +69,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponse getBookingById(long id) {
         log.info("Getting booking by ID '{}'", id);
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
         return bookingMapper.toBookingResponse(booking);
     }
@@ -79,7 +79,7 @@ public class BookingServiceImpl implements BookingService {
     public void cancelBooking(long id) {
         log.info("Getting booking by id '{}'", id);
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
         log.warn("Cancelling booking by ID '{}'", id);
         booking.setBookingStatus(BookingStatus.CANCELLED);
@@ -89,7 +89,7 @@ public class BookingServiceImpl implements BookingService {
 
         log.info("Getting room by ID '{}'", roomId);
         Room room = roomRepository.findById(booking.getRoom().getId())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
         log.info("Updating room, roomId '{}'", roomId);
         room.setBooking(null);
         room.setRoomStatus(RoomStatus.AVAILABLE);

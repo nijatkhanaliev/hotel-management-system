@@ -1,7 +1,18 @@
 package com.company.hotelmanagementsystem.entity;
 
 import com.company.hotelmanagementsystem.enums.RoomStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +36,7 @@ public class Room {
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50)
     private String roomNumber;
 
     @Column(nullable = false)
@@ -35,7 +46,7 @@ public class Room {
     @Column(length = 50)
     private RoomStatus roomStatus;
 
-    @OneToOne(mappedBy = "room",cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "room", cascade = CascadeType.REMOVE)
     private Booking booking;
 
     @Column(updatable = false)

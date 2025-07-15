@@ -10,9 +10,9 @@ import lombok.Setter;
 public class HotelRequest {
 
     @NotBlank(message = "Hotel name must not be blank")
-    @Size(max = 255,message = "Hotel name must be less than 255")
+    @Size(max = 255, message = "Hotel name must be less than 255")
     private String name;
 
-    @Size(max = 255,message = "Hotel name must be less than 255")
+    @Size(max = 255, message = "Hotel name must be less than 255")
     private String location;
 }

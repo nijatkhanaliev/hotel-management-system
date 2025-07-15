@@ -19,9 +19,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFound(NotFoundException ex, HttpServletRequest req) {
+    public ResponseEntity<ExceptionResponse> handleNotFound(NotFoundException ex,
+                                                            HttpServletRequest req) {
         log.error("Not found. errorMessage: {}", ex.getMessage());
-        String path = req.getRequestURI();
+        final String path = req.getRequestURI();
 
         return ResponseEntity.status(NOT_FOUND)
                 .body(
@@ -35,9 +36,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleNotValid(MethodArgumentNotValidException ex, HttpServletRequest req) {
+    public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpServletRequest req) {
+
         log.error("Method argument not valid. errorMessage: {}", ex.getMessage());
-        String path = req.getRequestURI();
+        final String path = req.getRequestURI();
         Set<String> errors = new HashSet<>();
 
         ex.getBindingResult().getFieldErrors()
@@ -55,15 +58,33 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BookingValidationException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalid(BookingValidationException ex, HttpServletRequest req) {
+    public ResponseEntity<ExceptionResponse> handleBookingValidation(BookingValidationException ex,
+                                                                     HttpServletRequest req) {
         log.error("Booking is not valid. errorMessage: {}", ex.getMessage());
-        String path = req.getRequestURI();
+        final String path = req.getRequestURI();
 
         return ResponseEntity.status(BAD_REQUEST)
                 .body(
                         ExceptionResponse.builder()
                                 .error(ex.getErrorCode())
                                 .message(ex.getErrorMessage())
+                                .status(400)
+                                .path(path)
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ExceptionResponse> handleIllegalArgument(IllegalArgumentException ex,
+                                                                   HttpServletRequest req) {
+        log.error("IllegalArgumentException happened. errorMessage: {}", ex.getMessage());
+        final String path = req.getRequestURI();
+
+        return ResponseEntity.status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .error("ILLEGAL_ARGUMENT")
+                                .message(ex.getMessage())
                                 .status(400)
                                 .path(path)
                                 .build()

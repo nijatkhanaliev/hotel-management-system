@@ -46,20 +46,20 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public HotelResponse getHotelById(long id) {
-        log.info("Getting hotel by id '{}'",id);
+        log.info("Getting hotel by id '{}'", id);
         Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
         return hotelMapper.toHotelResponse(hotel);
     }
 
     @Override
     public HotelResponse updateHotel(long id, HotelRequest hotelRequest) {
-        log.info("Getting Hotel by ID '{}'",id);
+        log.info("Getting Hotel by ID '{}'", id);
         Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
-        log.info("Updating Hotel, hotelID '{}'",id);
+        log.info("Updating Hotel, hotelID '{}'", id);
         hotel.setName(hotelRequest.getName());
         hotel.setLocation(hotelRequest.getLocation());
         hotelRepository.save(hotel);
@@ -69,11 +69,11 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void deleteHotel(long id) {
-        log.info("Getting hotel by ID '{}'",id);
-       Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(()-> new NotFoundException(NOT_FOUND_MESSAGE,NOT_FOUND));
+        log.info("Getting hotel by ID '{}'", id);
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
-        log.warn("Deleting hotel, hotelId '{}'",id);
+        log.warn("Deleting hotel, hotelId '{}'", id);
         hotelRepository.delete(hotel);
     }
 

@@ -9,7 +9,7 @@ import java.util.Set;
 @Builder
 public class ExceptionResponse {
     @Builder.Default
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timestamp = LocalDateTime.now();
     private int status;
     private String error;
