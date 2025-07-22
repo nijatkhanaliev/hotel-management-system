@@ -6,40 +6,33 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "hotels")
-public class Hotel {
+@Table(name = "hotel_description")
+public class HotelDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false,length = 5)
+    private String language;
 
-    private String location;
+    @Lob
+    private String description;
 
-    @Column(updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
-    private List<HotelDescription> descriptions;
-
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.REMOVE)
-    private List<Room> rooms;
+    @ManyToOne
+    @JoinColumn(name = "hotel_id")
+    public Hotel hotel;
 }

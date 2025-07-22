@@ -10,9 +10,9 @@ public interface HotelService {
 
     List<HotelResponse> getAllHotel();
 
-    HotelResponse getHotelById(long id);
+    HotelResponse getHotelById(Long id);
 
-    HotelResponse updateHotel(long id, HotelRequest hotelRequest);
+    HotelResponse updateHotel(Long id, HotelRequest hotelRequest);
 
-    void deleteHotel(long id);
+    void deleteHotel(Long id);
 }
