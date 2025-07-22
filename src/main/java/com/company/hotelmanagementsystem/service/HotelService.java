@@ -6,11 +6,11 @@ import com.company.hotelmanagementsystem.dto.response.HotelResponse;
 import java.util.List;
 
 public interface HotelService {
-    HotelResponse createHotel(HotelRequest hotelRequest);
+    HotelResponse createHotel(HotelRequest hotelRequest, String lang);
 
-    List<HotelResponse> getAllHotel();
+    List<HotelResponse> getAllHotel(String lang);
 
-    HotelResponse getHotelById(Long id);
+    HotelResponse getHotelById(Long id, String lang);
 
     HotelResponse updateHotel(Long id, HotelRequest hotelRequest);
 

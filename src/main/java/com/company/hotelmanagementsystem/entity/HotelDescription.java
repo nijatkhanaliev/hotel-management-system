@@ -26,7 +26,7 @@ public class HotelDescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false,length = 5)
+    @Column(nullable = false,length = 10)
     private String language;
 
     @Lob

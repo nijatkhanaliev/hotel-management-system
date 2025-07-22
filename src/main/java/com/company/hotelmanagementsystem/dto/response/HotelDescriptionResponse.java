@@ -6,7 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HotelDescriptionResponse {
-    private Long id;
-    private String language;
     private String description;
 }

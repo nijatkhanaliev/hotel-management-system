@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,19 +28,21 @@ public class HotelController {
     private final HotelService hotelService;
 
     @PostMapping
-    public ResponseEntity<HotelResponse> createHotel(@Valid @RequestBody HotelRequest hotelRequest) {
+    public ResponseEntity<HotelResponse> createHotel(@Valid @RequestBody HotelRequest hotelRequest,
+                                                     @RequestHeader("lang") String lang) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(hotelService.createHotel(hotelRequest));
+                .body(hotelService.createHotel(hotelRequest, lang));
     }
 
     @GetMapping
-    public ResponseEntity<List<HotelResponse>> getAllHotel() {
-        return ResponseEntity.ok(hotelService.getAllHotel());
+    public ResponseEntity<List<HotelResponse>> getAllHotel(@RequestHeader(name = "lang") String lang) {
+        return ResponseEntity.ok(hotelService.getAllHotel(lang));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HotelResponse> getHotelById(@PathVariable long id) {
-        return ResponseEntity.ok(hotelService.getHotelById(id));
+    public ResponseEntity<HotelResponse> getHotelById(@PathVariable long id,
+                                                      @RequestHeader(name = "lang") String lang) {
+        return ResponseEntity.ok(hotelService.getHotelById(id,lang));
     }
     
     @PutMapping("/{id}")

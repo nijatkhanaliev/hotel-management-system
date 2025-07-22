@@ -4,9 +4,11 @@ import com.company.hotelmanagementsystem.dto.request.HotelRequest;
 import com.company.hotelmanagementsystem.dto.response.HotelResponse;
 import com.company.hotelmanagementsystem.entity.Hotel;
 import com.company.hotelmanagementsystem.exception.NotFoundException;
+import com.company.hotelmanagementsystem.mapper.HotelDescriptionMapper;
 import com.company.hotelmanagementsystem.mapper.HotelMapper;
 import com.company.hotelmanagementsystem.repository.HotelRepository;
 import com.company.hotelmanagementsystem.service.HotelService;
+import com.company.hotelmanagementsystem.util.HotelUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,21 +25,31 @@ import static com.company.hotelmanagementsystem.exception.constant.ErrorMessage.
 public class HotelServiceImpl implements HotelService {
     private final HotelRepository hotelRepository;
     private final HotelMapper hotelMapper;
+    private final HotelDescriptionMapper hotelDescriptionMapper;
 
     @Override
-    public HotelResponse createHotel(HotelRequest hotelRequest) {
+    public HotelResponse createHotel(HotelRequest hotelRequest, String lang) {
         log.info("Creating new hotel");
+
+        HotelUtil.validateUniqueLanguage(hotelRequest);
         Hotel hotel = hotelMapper.toHotel(hotelRequest);
-
         hotelRepository.save(hotel);
+        HotelResponse response = hotelMapper.toHotelResponse(hotel);
 
-        return hotelMapper.toHotelResponse(hotel);
+        hotel.getDescriptions()
+                .stream()
+                .filter((d) -> d.getLanguage().equalsIgnoreCase(lang))
+                .findFirst()
+                .map(hotelDescriptionMapper::toHotelDescriptionResponse)
+                .ifPresent(response::setHotelDescriptionResponse);
+
+        return response;
     }
 
     @Override
-    public List<HotelResponse> getAllHotel() {
+    public List<HotelResponse> getAllHotel(String lang) {
         log.info("Getting all hotels");
-        List<Hotel> hotels = hotelRepository.findAll();
+        List<Hotel> hotels = hotelRepository.findAllWithDescriptions(lang);
 
         return hotels.stream()
                 .map(hotelMapper::toHotelResponse)
@@ -45,9 +57,9 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public HotelResponse getHotelById(Long id) {
+    public HotelResponse getHotelById(Long id, String lang) {
         log.info("Getting hotel by id '{}'", id);
-        Hotel hotel = hotelRepository.findById(id)
+        Hotel hotel = hotelRepository.findHotelWithDescription(id, lang)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
         return hotelMapper.toHotelResponse(hotel);

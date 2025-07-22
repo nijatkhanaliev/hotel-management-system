@@ -10,7 +10,7 @@ import lombok.Setter;
 public class HotelDescriptionRequest {
 
     @NotBlank(message = "Language cannot be blank")
-    @Size(max = 5,message = "Language can contains 5 character maximum")
+    @Size(max = 20,message = "Language can contains 5 character maximum")
     private String language;
 
     @NotBlank(message = "Hotel description cannot be blank")
