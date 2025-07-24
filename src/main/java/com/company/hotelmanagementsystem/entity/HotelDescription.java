@@ -29,7 +29,6 @@ public class HotelDescription {
     @Column(nullable = false,length = 10)
     private String language;
 
-    @Lob
     private String description;
 
     @ManyToOne

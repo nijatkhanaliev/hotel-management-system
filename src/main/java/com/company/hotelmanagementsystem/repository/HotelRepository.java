@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-    @Query("select distinct h from Hotel h join fetch h.descriptions d where d.language = :lang")
+    @Query("select distinct h from Hotel h join fetch h.descriptions d where lower(d.language) in (lower(:lang), 'eng')")
     List<Hotel> findAllWithDescriptions(@Param("lang") String language);
 
-    @Query("select h from Hotel h join fetch h.descriptions d where h.id = :id and d.language = :lang")
+    @Query("select h from Hotel h join fetch h.descriptions d where h.id = :id and lower(d.language) in (lower(:lang), 'eng')")
     Optional<Hotel> findHotelWithDescription(@Param("id") Long id, @Param("lang") String language);
 
 }

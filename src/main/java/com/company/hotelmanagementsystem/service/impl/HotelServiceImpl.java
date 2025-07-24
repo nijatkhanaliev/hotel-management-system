@@ -33,6 +33,7 @@ public class HotelServiceImpl implements HotelService {
 
         HotelUtil.validateUniqueLanguage(hotelRequest);
         Hotel hotel = hotelMapper.toHotel(hotelRequest);
+        hotel.getDescriptions().forEach((d)-> d.setHotel(hotel));
         hotelRepository.save(hotel);
         HotelResponse response = hotelMapper.toHotelResponse(hotel);
 
@@ -41,7 +42,7 @@ public class HotelServiceImpl implements HotelService {
                 .filter((d) -> d.getLanguage().equalsIgnoreCase(lang))
                 .findFirst()
                 .map(hotelDescriptionMapper::toHotelDescriptionResponse)
-                .ifPresent(response::setHotelDescriptionResponse);
+                .ifPresent(response::setDescription);
 
         return response;
     }
