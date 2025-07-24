@@ -1,6 +1,7 @@
 package com.company.hotelmanagementsystem.service.impl;
 
 import com.company.hotelmanagementsystem.dto.request.HotelRequest;
+import com.company.hotelmanagementsystem.dto.response.HotelProjection;
 import com.company.hotelmanagementsystem.dto.response.HotelResponse;
 import com.company.hotelmanagementsystem.entity.Hotel;
 import com.company.hotelmanagementsystem.exception.NotFoundException;
@@ -33,7 +34,7 @@ public class HotelServiceImpl implements HotelService {
 
         HotelUtil.validateUniqueLanguage(hotelRequest);
         Hotel hotel = hotelMapper.toHotel(hotelRequest);
-        hotel.getDescriptions().forEach((d)-> d.setHotel(hotel));
+        hotel.getDescriptions().forEach((d) -> d.setHotel(hotel));
         hotelRepository.save(hotel);
         HotelResponse response = hotelMapper.toHotelResponse(hotel);
 
@@ -42,18 +43,25 @@ public class HotelServiceImpl implements HotelService {
                 .filter((d) -> d.getLanguage().equalsIgnoreCase(lang))
                 .findFirst()
                 .map(hotelDescriptionMapper::toHotelDescriptionResponse)
-                .ifPresent(response::setDescription);
+                .ifPresentOrElse(response::setDescription, () -> {
+                    hotel.getDescriptions().stream()
+                            .filter((d) -> d.getLanguage().equalsIgnoreCase("eng"))
+                            .findFirst()
+                            .map(hotelDescriptionMapper::toHotelDescriptionResponse)
+                            .ifPresent(response::setDescription);
+                });
 
         return response;
     }
 
     @Override
     public List<HotelResponse> getAllHotel(String lang) {
-        log.info("Getting all hotels");
-        List<Hotel> hotels = hotelRepository.findAllWithDescriptions(lang);
+        log.info("Getting all hotels, lang: {}", lang);
 
-        return hotels.stream()
-                .map(hotelMapper::toHotelResponse)
+        List<HotelProjection> hotelProjections = hotelRepository.findAllWithDescriptions(lang);
+
+        return hotelProjections.stream()
+                .map(hotelMapper::toHotelResponseFromProject)
                 .toList();
     }
 
