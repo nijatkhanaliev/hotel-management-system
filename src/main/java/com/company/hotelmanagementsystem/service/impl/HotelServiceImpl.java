@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 import static com.company.hotelmanagementsystem.exception.constant.ErrorCode.NOT_FOUND;
@@ -68,10 +70,10 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public HotelResponse getHotelById(Long id, String lang) {
         log.info("Getting hotel by id '{}'", id);
-        Hotel hotel = hotelRepository.findHotelWithDescription(id, lang)
+        HotelProjection projection = hotelRepository.findHotelWithDescription(id, lang)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE, NOT_FOUND));
 
-        return hotelMapper.toHotelResponse(hotel);
+        return hotelMapper.toHotelResponseFromProject(projection);
     }
 
     @Override

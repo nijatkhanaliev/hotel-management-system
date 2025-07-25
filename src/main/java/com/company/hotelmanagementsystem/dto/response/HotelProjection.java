@@ -7,5 +7,5 @@ public interface HotelProjection {
         String getName();
         String getLocation();
         LocalDateTime getCreatedAt();
-        String getDescription(); // Flattened, no nested HotelDescriptionResponse
+        String getDescription();
 }
