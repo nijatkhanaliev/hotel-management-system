@@ -37,10 +37,10 @@ public interface HotelMapper {
             return null;
         }
 
-        HotelDescriptionResponse descriptionResponse = new HotelDescriptionResponse();
-        descriptionResponse.setDescription(des);
-
-        return descriptionResponse;
+        return HotelDescriptionResponse
+                .builder()
+                .description(des)
+                .build();
     }
 
 }

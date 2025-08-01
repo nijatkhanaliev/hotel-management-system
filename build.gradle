@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'com.company'
@@ -49,3 +50,57 @@ checkstyle {
     configFile = file('config/checkstyle.xml')
     showViolations = true
 }
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+def filteredClasses = fileTree("$buildDir/classes/java/main") {
+    include 'com/company/hotelmanagementsystem/controller/**'
+    include 'com/company/hotelmanagementsystem/service/**'
+    exclude 'com/company/hotelmanagementsystem/mapper/**'
+    exclude 'com/company/hotelmanagementsystem/dto/**'
+    exclude 'com/company/hotelmanagementsystem/entity/**'
+    exclude 'com/company/hotelmanagementsystem/repository/**'
+    exclude 'com/company/hotelmanagementsystem/util/**'
+    exclude 'com/company/hotelmanagementsystem/config/**'
+
+}
+
+
+jacocoTestReport {
+    dependsOn test
+    classDirectories.setFrom(filteredClasses)
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test
+    classDirectories.setFrom(filteredClasses)
+
+    violationRules {
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.70
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification

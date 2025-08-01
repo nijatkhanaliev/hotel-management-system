@@ -3,6 +3,7 @@ package com.company.hotelmanagementsystem.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
 public class HotelRequest {
 
     @NotBlank(message = "Hotel name must not be blank")
